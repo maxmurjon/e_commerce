@@ -11,11 +11,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type productRepo struct {
+type productRepo struct { // Struct hosil qilmoqdamiz
 	collection *mongo.Collection
 }
 
-func NewProductRepo(db *mongo.Database) repo.ProductStorageI {
+func NewProductRepo(db *mongo.Database) repo.ProductStorageI { // Struct dan object hosil qivommiza
 	return &productRepo{
 		collection: db.Collection(config.CollectionName)}
 }
