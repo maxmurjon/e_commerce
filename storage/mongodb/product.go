@@ -1,27 +1,20 @@
-package mongo
+package mongodb
 
 import (
 	"context"
-
 	"e_commerce/api/models"
-	"e_commerce/config"
-	"e_commerce/storage/repo"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type productRepo struct { // Struct hosil qilmoqdamiz
+type productRepo struct {
 	collection *mongo.Collection
 }
 
-func NewProductRepo(db *mongo.Database) repo.ProductStorageI { // Struct dan object hosil qivommiza
-	return &productRepo{
-		collection: db.Collection(config.CollectionName)}
-}
-
-func (pr *productRepo) Create(product *models.Product) (string, error) {
-	_, err := pr.collection.InsertOne(
+func (p *productRepo) Create(product *models.Product) (msg string, err error) {
+	_, err = p.collection.InsertOne(
 		context.Background(),
 		product,
 	)
@@ -33,9 +26,9 @@ func (pr *productRepo) Create(product *models.Product) (string, error) {
 	return product.ID, nil
 }
 
-func (pr *productRepo) Get(id string) (*models.Product, error) {
+func (p *productRepo) Get(id string) (*models.Product, error) {
 	var product models.Product
-	response := pr.collection.FindOne(
+	response := p.collection.FindOne(
 		context.Background(),
 		bson.M{
 			"id": id,
@@ -50,8 +43,7 @@ func (pr *productRepo) Get(id string) (*models.Product, error) {
 	return &product, nil
 }
 
-func (pr *productRepo) GetAll(page, limit int64, name string) ([]*models.Product, int64, error) {
-
+func (p *productRepo) GetAll(page, limit int64, name string) (product []*models.Product, num int64, err error) {
 	var (
 		products []*models.Product
 		filter   = bson.D{}
@@ -70,13 +62,13 @@ func (pr *productRepo) GetAll(page, limit int64, name string) ([]*models.Product
 		"created_at": -1,
 	})
 
-	count, err := pr.collection.CountDocuments(context.Background(), filter)
+	count, err := p.collection.CountDocuments(context.Background(), filter)
 
 	if err != nil {
 		return nil, 0, err
 	}
 
-	rows, err := pr.collection.Find(
+	rows, err := p.collection.Find(
 		context.Background(),
 		filter,
 		opts,

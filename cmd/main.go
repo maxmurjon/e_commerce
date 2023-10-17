@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"e_commerce/api"
 	"e_commerce/config"
 	"e_commerce/storage"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"e_commerce/storage/mongodb"
 )
 
 var (
@@ -16,37 +14,12 @@ var (
 	cfg  config.Config
 )
 
-func initDependencies() {
+func main() {
 	cfg = config.Load()
 
-	credential := options.Credential{
-		Username: cfg.MongoUser,
-		Password: cfg.MongoPassword,
-	}
 	mongoString := fmt.Sprintf("mongodb://%s:%d", cfg.MongoHost, cfg.MongoPort)
+	strg := mongodb.NewMongo(context.Background(), mongoString)
 
-	mongoConn, err := mongo.Connect(context.Background(), options.Client().ApplyURI(mongoString).SetAuth(credential))
-
-	if err != nil {
-		fmt.Println("error to connect to mongo database")
-	}
-	connDB := mongoConn.Database("mongo-golang")
-
-	strg = storage.NewProductStorage(connDB)
-}
-
-func main() {
-	initDependencies()
-	server := api.New(api.RouterOptions{
-		Config:  cfg,
-		Storage: strg,
-	})
-
-	err := server.Run(cfg.Port)
-
-	if err != nil {
-		fmt.Println("Something went wrong")
-		panic(err)
-	}
-
+	// fmt.Println(strg.Product().Create(&models.Product{ID: "12343"}))
+	fmt.Println(strg.Product().Get("12343"))
 }
