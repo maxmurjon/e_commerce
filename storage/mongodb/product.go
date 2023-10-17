@@ -2,7 +2,7 @@ package mongodb
 
 import (
 	"context"
-	"e_commerce/api/models"
+	"e_commerce/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

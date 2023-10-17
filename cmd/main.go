@@ -20,6 +20,5 @@ func main() {
 	mongoString := fmt.Sprintf("mongodb://%s:%d", cfg.MongoHost, cfg.MongoPort)
 	strg := mongodb.NewMongo(context.Background(), mongoString)
 
-	// fmt.Println(strg.Product().Create(&models.Product{ID: "12343"}))
 	fmt.Println(strg.Product().Get("12343"))
 }

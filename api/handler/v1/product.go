@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"e_commerce/api/models"
+	"e_commerce/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -70,8 +70,7 @@ func (h *handlerV1) CreateProduct(c *gin.Context) {
 	}
 
 	product.ID = id.String()
-	resp, err := h.storage.Product().Create(
-		&product)
+	resp, err := h.storage.Product().Create(&product)
 
 	if err != nil {
 		fmt.Println("error while creating product")
@@ -166,21 +165,18 @@ func (h *handlerV1) UpdateProduct(c *gin.Context) {
 		})
 }
 
-
-
-
 func (h *handlerV1) SignUp(c *gin.Context) {
-	
+
 }
 func (h *handlerV1) Login(c *gin.Context) {
-	
+
 }
 func (h *handlerV1) Addproduct(c *gin.Context) {
-	
+
 }
 func (h *handlerV1) GetproductAll(c *gin.Context) {
-	
+
 }
 func (h *handlerV1) GetproductById(c *gin.Context) {
-	
+
 }

@@ -1,6 +1,6 @@
 package storage
 
-import "e_commerce/api/models"
+import "e_commerce/models"
 
 type StorageI interface {
 	Product() ProductRepoI
